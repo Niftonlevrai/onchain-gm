@@ -1,0 +1,26 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+/// @title OnchainGM
+/// @notice Contrat minimal pour poster des "GM" on-chain
+contract OnchainGM {
+    event NewGM(address indexed author, uint256 indexed timestamp, string message);
+
+    string public lastMessage;
+    address public lastAuthor;
+    uint256 public lastTimestamp;
+
+    /// Poster un GM
+    function postGM(string calldata message) external {
+        lastMessage = message;
+        lastAuthor = msg.sender;
+        lastTimestamp = block.timestamp;
+
+        emit NewGM(msg.sender, block.timestamp, message);
+    }
+
+    /// Lire le dernier GM
+    function getLastGM() external view returns (address author, uint256 timestamp, string memory message) {
+        return (lastAuthor, lastTimestamp, lastMessage);
+    }
+}
